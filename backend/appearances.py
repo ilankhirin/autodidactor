@@ -1,7 +1,5 @@
-from google import search
 import requests
-import itertools
-import urllib
+import urls_scanner
 
 URL_LIMIT = 5
 def build_appearances_dict(subject, terms):

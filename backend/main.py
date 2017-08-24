@@ -14,8 +14,6 @@ app = Flask(__name__)
 def remove_parentheses(str):
     return re.sub(r"[\(\[].*?[\)\]]", "", str)
 
-
-
 @app.route("/")
 def asdf():
     return "asdf"
