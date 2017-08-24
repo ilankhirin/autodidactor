@@ -7,7 +7,7 @@ def build_appearances_dict(subject, terms):
     for term in terms:
         print term
         appearances_dict[term] = {}
-        search_results = search(subject + " " + term, stop=20, num=20)
+        search_results = urls_scanner.get_urls(subject + " " + term, URL_LIMIT)
         safe_urls = []
         seen_urls = []
 
@@ -19,18 +19,15 @@ def build_appearances_dict(subject, terms):
                 safe_urls.append(url)
                 if len(safe_urls) > URL_LIMIT:
                     break
-        try:
-            pass
-        except BaseException as e:
-            print e
-            print 'invalid search results'
-            print subject + " " + term
-            continue
 
         print safe_urls
         for url in safe_urls:
             print url
-            response = requests.get(url)
+            try:
+                response = requests.get(url, verify=False)
+            except BaseException as e:
+                print e
+                continue
             if response.status_code == 200:
                 page_content = unicode(response.content, errors='ignore')
                 for term2 in terms:
@@ -52,7 +49,5 @@ def count_substring_in_string(string, substring):
     except BaseException as e:
         print e
         return -1
-
-
 
 
