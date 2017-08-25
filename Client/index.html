@@ -14,11 +14,11 @@
 </head>
 
 <body ng-app="autodidactorApp">
-  <h1>Autodidactor</h1>
+  <img src="./logo.png" class="logo">
   <div ng-controller="autodidactorCtrl as autodidactorVm">
-    <input type="text" placeholder="enter subject..." ng-model="autodidactorVm.searchInput"
+    <input type="text" class="text-input" placeholder="enter subject..." ng-model="autodidactorVm.searchInput"
            ng-change="autodidactorVm.getSubjectAutocomlete(autodidactorVm.searchInput)">
-    <button ng-click="autodidactorVm.search(autodidactorVm.searchInput)">search</button>
+    <button ng-click="autodidactorVm.search(autodidactorVm.searchInput)" class="search-button"></button>
     <p>{{ autodidactorVm.subjectOptions }}</p>
 
     <div>
@@ -28,7 +28,8 @@
           {{ autodidactorVm.graphJson }}
         </p>
       </div>
-      <div id="mynetwork"></div>
+      <div id="mynetwork" class="graph-holder"></div>
+
     </div>
   </div>
 </body>

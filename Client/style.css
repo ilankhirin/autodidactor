@@ -6,4 +6,30 @@ body {
     width: 600px;
     height: 400px;
     border: 1px solid lightgray;
-  }
+}
+
+.graph-holder {
+    border-radius: 47px;
+    width: 80%;
+    margin: 10px auto;
+}
+
+.logo {
+    margin: 20px;
+    width: 200px;
+}
+
+.text-input {
+    height: 48px;
+    border-radius: 10px;
+    font-size: 22px;
+    font-family: sans-serif;
+    text-indent: 10px;
+}
+
+.search-button {
+    border-radius: 13px;
+    height: 48px;
+    width: 42px;
+    vertical-align: top
+}
