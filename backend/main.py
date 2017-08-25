@@ -4,6 +4,7 @@ from flask import jsonify
 import terms_provider
 # encoding=utf8
 import sys
+from multiprocessing.dummy import Pool as ThreadPool
 import categoryAutocomleter
 
 reload(sys)
@@ -24,12 +25,13 @@ def asdf():
 
 @app.route("/getGraph/<subject>")
 def getGraph(subject):
-    terms = terms_provider.get_final_terms(subject, 0)
+    terms = list(terms_provider.get_final_terms(subject, 0))
     print 'terms count: ' + str(len(terms))
-    terms = list(map(lambda x: remove_parentheses(x).lower().strip(), terms))
-    y = appearances.build_appearances_dict(subject, terms)
-    x = 4
-    return jsonify(y)
+    terms_passed = list(map(lambda x: (remove_parentheses(x).lower().strip(), terms, subject), terms))
+    print terms_passed
+    pool = ThreadPool(100)
+    results = pool.map(appearances.build_appearances_dict, terms_passed)
+    return jsonify(results)
 
 @app.route("/getAutocomplete/<input>")
 def getAutocomplete(input):
@@ -38,9 +40,3 @@ def getAutocomplete(input):
     return jsonify(optionsDict)
 
 app.run()
-
-
-
-
-
-

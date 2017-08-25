@@ -1,134 +1,172 @@
-var connectionsData = {
-    "css": {
-      "html": 547,
-      "javascript": 339,
-      "json": 20,
-      "promise": 0
-    },
-    "html": {
-      "css": 383,
-      "javascript": 291,
-      "json": 13,
-      "promise": 0
-    },
-    "javascript": {
-      "css": 282,
-      "html": 260,
-      "json": 17,
-      "promise": 1
-    },
-    "json": {
-      "css": 400,
-      "html": 363,
-      "javascript": 627,
-      "promise": 0
-    },
-    "promise": {
-      "css": 55,
-      "html": 42,
-      "javascript": 945,
-      "json": 20
-    }
-  };
-  
-  var cy = cytoscape({
-    container: document.getElementById('graph-container'),
-  
-    boxSelectionEnabled: false,
-    autounselectify: true,
-  
-    style: cytoscape.stylesheet()
-      .selector('node')
-      .css({
-        'content': 'data(id)'
-      })
-      .selector('edge')
-      .css({
-        'curve-style': 'bezier',
-        'target-arrow-shape': 'triangle',
-        'width': 4,
-        'line-color': '#ddd',
-        'target-arrow-color': '#ddd'
-      })
-      .selector('.highlighted')
-      .css({
-        'background-color': '#61bffc',
-        'line-color': '#61bffc',
-        'target-arrow-color': '#61bffc',
-        'transition-property': 'background-color, line-color, target-arrow-color',
-        'transition-duration': '0.5s'
-      }),
-  
-    elements: {
-      nodes: getNodes(connectionsData),
-      edges: getEdges(connectionsData)
-      // nodes: [
-      //   { data: { id: 'a' } },
-      //   { data: { id: 'b' } },
-      //   { data: { id: 'c' } },
-      //   { data: { id: 'd' } },
-      //   { data: { id: 'e' } }
-      // ],
-  
-      // edges: [
-      //   { data: { id: 'a"e', weight: 1, source: 'a', target: 'e' } },
-      //   { data: { id: 'ab', weight: 3, source: 'a', target: 'b' } },
-      //   { data: { id: 'be', weight: 4, source: 'b', target: 'e' } },
-      //   { data: { id: 'bc', weight: 5, source: 'b', target: 'c' } },
-      //   { data: { id: 'ce', weight: 6, source: 'c', target: 'e' } },
-      //   { data: { id: 'cd', weight: 2, source: 'c', target: 'd' } },
-      //   { data: { id: 'de', weight: 7, source: 'd', target: 'e' } }
-      // ]
-    },
-  
-    layout: {
-      name: 'breadthfirst',
-      directed: true,
-      roots: '#a',
-      padding: 10
-    }
-  });
-  
-  function getNodes(data) {
-    var nodes = [];
-    for (pageContainer in data) {
-      nodes.push({ data: { id: pageContainer } });
-    }
-  
-    return nodes;
+
+// create an array with nodes
+
+function getNodes(graphData) {
+  var nodeSizes = calculateNodeSizes(graphData);
+  var nodes = [];
+  var nodesLables = Object.keys(graphData);
+  for (var i = 0; i < nodesLables.length; i++) {
+    nodes.push({
+      id: i+1,
+      label: nodesLables[i],
+      font : {
+        size: nodeSizes[nodesLables[i]]
+      }
+    });
   }
-  
-  function getEdges(data) {
-    var edges = [];
-    
-    for (source in data) {
-      for (target in data[source]) {
-        edges.push({
-          data: {
-            id: source + "_" + target,
-            weight: data[source][target],
-            source: source,
-            target: target
-          }
-        });
+  return nodes;
+}
+
+function getEdges(graphData, nodesDictionary) {
+  var edges = [];    
+  for (var sourceNode in graphData) {
+    for (var targetNode in graphData[sourceNode]) {
+        var connectionsCount = graphData[sourceNode][targetNode];
+        if (connectionsCount > 0) {
+          edges.push({
+            from: nodesDictionary[sourceNode],
+            to: nodesDictionary[targetNode],
+            arrows: 'to',
+            width: connectionsCount
+          })
+        }
+    }
+  }
+
+  return edges;
+}
+
+function buildNodesDictionary(nodes) {
+  var nodesDictionary = {};
+  nodes.forEach(function(node) {
+    nodesDictionary[node.label] = node.id;
+  })
+  return nodesDictionary;
+}
+
+function normalizeCounts(graphData) {
+  for (var sourceNode in graphData) {
+    var maxCount = 0;
+    for (var targetNode in graphData[sourceNode]) {
+      var connectionsCount = graphData[sourceNode][targetNode];
+      if (connectionsCount > maxCount) {
+        maxCount = connectionsCount;
       }
     }
+    if (maxCount > 0) {
+      for (var targetNode in graphData) {
+        var connectionsCount = graphData[sourceNode][targetNode];
+        if (connectionsCount > 0) {
+          graphData[sourceNode][targetNode] = 1 + 2 * (0.0 + connectionsCount) / maxCount
+        }
+     }
+    }
+  }
+}
+
+
+function calculateNodeSizes(graphData) {
+  var nodesSize = {}
+  for (var sourceNode in graphData) {
+    for (var targetNode in graphData[sourceNode]) {
+      var connectionsCount = graphData[sourceNode][targetNode];
+      if (targetNode in nodesSize) {
+        nodesSize[targetNode] += connectionsCount;
+      } else {
+        nodesSize[targetNode] = connectionsCount;
+      }
+    }
+  }
+  var minSize = _.min(_.values(nodesSize));
+  var maxSize = _.max(_.values(nodesSize));
+
+  var maxFont = 30;
+  var minFont = 10;
+
+  for (var node in nodesSize) {
+    nodesSize[node] = nodesSize[node] * (0.0 + maxFont - minFont) / (maxSize - minSize) + (minFont - minSize);
+  }
+
+  return nodesSize;
+}
+
+
+function graphInitializer(graphData) {
+  var nodes = getNodes(graphData);
+  normalizeCounts(graphData);
+  var nodesDictionary = buildNodesDictionary(nodes);
+  var edges = getEdges(graphData, nodesDictionary);
   
-    
-    return edges;
+  var nodes2 = new vis.DataSet([
+    {id: 1, label: 'X'},
+    {id: 2, label: 'Y'},
+    {id: 3, label: 'Z'}
+  ]);
+  
+  // create an array with edges
+  var edges2 = new vis.DataSet([
+    {from: 1, to: 2, arrows:'to', width: 5},
+    {from: 2, to: 3, arrows:'to'},
+  ]);
+  
+  // create a network
+  var container = document.getElementById('mynetwork');
+  var data = {
+    nodes: nodes,
+    edges: edges
+  };
+  var options = {
+    physics:{
+      enabled: true,
+      barnesHut: {
+        gravitationalConstant: -2000,
+        centralGravity: 0.3,
+        springLength: 95,
+        springConstant: 0.04,
+        damping: 0.09,
+        avoidOverlap: 0
+      },
+      forceAtlas2Based: {
+        gravitationalConstant: -50,
+        centralGravity: 0.01,
+        springConstant: 0.08,
+        springLength: 100,
+        damping: 0.4,
+        avoidOverlap: 0
+      },
+      repulsion: {
+        centralGravity: 0.2,
+        springLength: 200,
+        springConstant: 0.05,
+        nodeDistance: 200,
+        damping: 0.09
+      },
+      hierarchicalRepulsion: {
+        centralGravity: 0.0,
+        springLength: 100,
+        springConstant: 0.01,
+        nodeDistance: 120,
+        damping: 0.09
+      },
+      maxVelocity: 50,
+      minVelocity: 0.1,
+      solver: 'repulsion',
+      stabilization: {
+        enabled: true,
+        iterations: 1000,
+        updateInterval: 100,
+        onlyDynamicEdges: false,
+        fit: true
+      },
+      timestep: 0.5,
+      adaptiveTimestep: true
+    }
   }
   
-  // var bfs = cy.elements().bfs('#a', function(){}, true);
   
-  // var i = 0;
-  // var highlightNextEle = function(){
-  //   if( i < bfs.path.length ){
-  //     bfs.path[i].addClass('highlighted');
-  
-  //     i++;
-  //     setTimeout(highlightNextEle, 1000);
-  //   }
-  // };
-  
-  // // kick off first highlight
-  // highlightNextEle();
+  var network = new vis.Network(container, data, options);
+}
+
+graphOperations = {
+  initializeGraph: graphInitializer
+}

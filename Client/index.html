@@ -8,32 +8,47 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="./node_modules/bootstrap/dist/css/bootstrap.min.css">
   <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="http://visjs.org/dist/vis.css">
+
   <link rel="icon" type="image/x-icon" href="favicon.ico">
+  <style type="text/css">
+    #mynetwork {
+      width: 600px;
+      height: 400px;
+      border: 1px solid lightgray;
+    }
+  </style>
+
+
 </head>
 
 <body ng-app="autodidactorApp">
   <h1>Autodidactor</h1>
   <div ng-controller="autodidactorCtrl as autodidactorVm">
-    <input type="text" ng-model="autodidactorVm.searchInput" ng-change="autodidactorVm.getSubjectAutocomlete(autodidactorVm.searchInput)">
-    <button
-      ng-click="autodidactorVm.search(autodidactorVm.searchInput)">search</button>
-      <p>{{ autodidactorVm.subjectOptions }}</p>
+    <input type="text" placeholder="enter subject..." ng-model="autodidactorVm.searchInput"
+           ng-change="autodidactorVm.getSubjectAutocomlete(autodidactorVm.searchInput)">
+    <button ng-click="autodidactorVm.search(autodidactorVm.searchInput)">search</button>
+    <p>{{ autodidactorVm.subjectOptions }}</p>
 
-      <div>
-        <div id="temp-response" style="border: 1px solid black">
-          <h2>Response</h2>
-          <p>
-            {{ autodidactorVm.graphJson }}
-          </p>
-        </div>
-        <div id="graph-container"></div>
+    <div>
+      <div id="temp-response" style="border: 1px solid black">
+        <h2>Response</h2>
+        <p>
+          {{ autodidactorVm.graphJson }}
+        </p>
       </div>
+      <div id="mynetwork"></div>
+    </div>
   </div>
 </body>
 
-<script src="./node_modules/angular/angular.js"></script>
-<script src="./node_modules/cytoscape/dist/cytoscape.js"></script>
-<script src="./all.js"></script>
+<script src="./node_modules/lodash/lodash.js"></script>
 <script src="./graph.js"></script>
+<script src="http://visjs.org/dist/vis.js"></script>
+<script src="./node_modules/angular/angular.js"></script>
+<script src="./all.js"></script>
+
+
+
 
 </html>
