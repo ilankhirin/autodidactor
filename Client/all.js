@@ -28,16 +28,10 @@ angular.module("autodidactorApp").controller("autodidactorCtrl", function($http)
 
     autodidactorVm.getSubjectAutocomlete = function(inputText) {
         console.log(inputText);
-        debugger;
         url = BACKEND_URL + "/getAutocomplete/" + inputText;
-
-        SUBJECT_AUTOCOMPLETE_PARAMS.search = inputText;
         $http.get(url)
             .then(function(res) {
-                debugger;
-            },
-            function(res) {
-                debugger;
+                autodidactorVm.subjectOptions = res.data.options;
             });
     }
 

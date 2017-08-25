@@ -17,6 +17,7 @@
     <input type="text" ng-model="autodidactorVm.searchInput" ng-change="autodidactorVm.getSubjectAutocomlete(autodidactorVm.searchInput)">
     <button
       ng-click="autodidactorVm.search(autodidactorVm.searchInput)">search</button>
+      <p>{{ autodidactorVm.subjectOptions }}</p>
 
       <div>
         <div id="temp-response" style="border: 1px solid black">
