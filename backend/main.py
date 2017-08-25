@@ -23,10 +23,13 @@ def asdf():
 def hello(subject):
     terms = list(terms_provider.get_final_terms(subject, 0))
     print 'terms count: ' + str(len(terms))
-    terms_passed = list(map(lambda x: (remove_parentheses(x).lower().strip(), terms, subject), terms))
+    terms_passed = list(map(lambda x: (remove_parentheses(x).lower().strip(), terms, subject), terms[:50]))
     print terms_passed
     pool = ThreadPool(100)
     results = pool.map(appearances.build_appearances_dict, terms_passed)
+    pool.close()
+    pool.join()
+
     return jsonify(results)
 
 app.run()
