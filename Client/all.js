@@ -50,8 +50,9 @@ angular.module("autodidactorApp").controller("autodidactorCtrl", function ($http
         });
     }
 
-    autodidactorVm.getSubjectAutocomlete = function (inputText) {
-        console.log(inputText);
+    autodidactorVm.getSubjectAutocomlete = _.throttle(getSubjectAutocomlete, 1000);
+
+    function getSubjectAutocomlete(inputText) {
         url = BACKEND_URL + "/getAutocomplete/" + inputText;
         $http.get(url)
             .then(function (res) {
