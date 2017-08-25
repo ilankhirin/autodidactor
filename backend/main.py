@@ -9,7 +9,10 @@ reload(sys)
 sys.setdefaultencoding('utf8')
 
 from flask import Flask
+from flask_cors import CORS
+
 app = Flask(__name__)
+CORS(app)
 
 def remove_parentheses(str):
     return re.sub(r"[\(\[].*?[\)\]]", "", str)
