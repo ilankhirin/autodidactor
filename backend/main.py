@@ -22,7 +22,7 @@ def asdf():
     return "asdf"
 
 @app.route("/getGraph/<subject>")
-def hello(subject):
+def getGraph(subject):
     terms = terms_provider.get_final_terms(subject, 0)
     print 'terms count: ' + str(len(terms))
     terms = list(map(lambda x: remove_parentheses(x).lower().strip(), terms))
