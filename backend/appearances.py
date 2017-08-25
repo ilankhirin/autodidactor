@@ -22,11 +22,13 @@ def build_appearances_dict(args):
 
     for url in safe_urls:
         try:
+            print "scanning url " + url
             response = requests.get(url, verify=False)
         except BaseException as e:
             print e
             continue
         if response.status_code == 200:
+            print "finished scanning " + url
             data = response.text
             page_content = str(BeautifulSoup(data).text)
             for term2 in all_terms:

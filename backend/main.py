@@ -25,7 +25,7 @@ def hello(subject):
     print 'terms count: ' + str(len(terms))
     terms_passed = list(map(lambda x: (x, terms, subject), terms))
     print terms_passed
-    pool = ThreadPool(100)
+    pool = ThreadPool(20)
     results = pool.map(appearances.build_appearances_dict, terms_passed)
     newResults = {}
     for result in results:
