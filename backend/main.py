@@ -4,6 +4,7 @@ from flask import jsonify
 import terms_provider
 # encoding=utf8
 import sys
+import categoryAutocomleter
 
 reload(sys)
 sys.setdefaultencoding('utf8')
@@ -29,6 +30,12 @@ def getGraph(subject):
     y = appearances.build_appearances_dict(subject, terms)
     x = 4
     return jsonify(y)
+
+@app.route("/getAutocomplete/<input>")
+def getAutocomplete(input):
+    options = categoryAutocomleter.getOptions(input)
+    optionsDict = { "options" : options }
+    return jsonify(optionsDict)
 
 app.run()
 
