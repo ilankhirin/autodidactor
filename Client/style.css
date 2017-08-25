@@ -33,3 +33,8 @@ body {
     width: 42px;
     vertical-align: top
 }
+
+.input-container {
+    width: 40%;
+    margin: 50px auto;
+}

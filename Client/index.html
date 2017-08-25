@@ -6,8 +6,9 @@
   <title>Autodidactors</title>
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="stylesheet" href="./node_modules/bootstrap/dist/css/bootstrap.min.css">
-  <link rel="stylesheet" href="http://visjs.org/dist/vis.css">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/vis/4.20.1/vis.min.css">
+  <link rel="stylesheet" href="./libs/autocomplete.css">
   <link rel="stylesheet" href="style.css">
 
   <link rel="icon" type="image/x-icon" href="favicon.ico">
@@ -16,48 +17,28 @@
 <body ng-app="autodidactorApp">
   <img src="./logo.png" class="logo">
   <div ng-controller="autodidactorCtrl as vm">
-      <md-autocomplete
-      ng-disabled="ctrl.isDisabled"
-      md-no-cache="ctrl.noCache"
-      md-selected-item="ctrl.selectedItem"
-      md-search-text-change="ctrl.searchTextChange(ctrl.searchText)"
-      md-search-text="ctrl.searchText"
-      md-selected-item-change="ctrl.selectedItemChange(item)"
-      md-items="item in ctrl.querySearch(ctrl.searchText)"
-      md-item-text="item.display"
-      md-min-length="0"
-      placeholder="What is your favorite US state?">
-    <md-item-template>
-      <span md-highlight-text="ctrl.searchText" md-highlight-flags="^i">{{item.display}}</span>
-    </md-item-template>
-    <md-not-found>
-      No states matching "{{ctrl.searchText}}" were found.
-      <a ng-click="ctrl.newState(ctrl.searchText)">Create a new one!</a>
-    </md-not-found>
-  </md-autocomplete>
-
-
-    <input type="text" class="text-input" placeholder="enter subject..." ng-model="vm.searchInput"
-           ng-change="vm.getSubjectAutocomlete(vm.searchInput)">
-    <button ng-click="vm.search(vm.searchInput)" class="search-button"></button>
-    <p>{{ vm.subjectOptions }}</p>
+    <div class="input-container">
+      <autocomplete attr-placeholder="Enter subject..." ng-model="vm.searchText" data="vm.subjectOptions"
+                    on-type="vm.getSubjectAutocomlete" on-select="vm.search"></autocomplete>
+    </div>
 
     <div>
-      <div id="temp-response" style="border: 1px solid black">
+      <!-- <div id="temp-response" style="border: 1px solid black">
         <h2>Response</h2>
         <p>
           {{ vm.graphJson }}
         </p>
-      </div>
+      </div> -->
       <div id="mynetwork" class="graph-holder"></div>
 
     </div>
   </div>
 </body>
 
-<script src="./node_modules/lodash/lodash.js"></script>
-<script src="http://visjs.org/dist/vis.js"></script>
-<script src="./node_modules/angular/angular.js"></script>
+<script src="https://cdn.jsdelivr.net/lodash/4.17.4/lodash.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/vis/4.20.1/vis.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular.min.js"></script>
+<script src="./libs/autocomplete.js"></script>
 <script src="./graph.js"></script>
 <script src="./all.js"></script>
 

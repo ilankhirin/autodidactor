@@ -1,11 +1,11 @@
 var BACKEND_URL = "http://localhost:5000";
 
-angular.module("autodidactorApp", []);
+angular.module("autodidactorApp", ["autocomplete"]);
 
-angular.module("autodidactorApp").controller("autodidactorCtrl", function ($http) {
+angular.module("autodidactorApp").controller("autodidactorCtrl", function ($http, $timeout) {
     var vm = this;
 
-    vm.searchInput = "";
+    vm.searchText = "";
     vm.graphJson = "Not back yet...";
 
     vm.search = function (inputSubject) {
@@ -23,7 +23,9 @@ angular.module("autodidactorApp").controller("autodidactorCtrl", function ($http
         url = BACKEND_URL + "/getAutocomplete/" + inputText;
         $http.get(url)
             .then(function (res) {
-                vm.subjectOptions = res.data.options;
+                $timeout(function () {
+                    vm.subjectOptions = res.data.options;
+                }, 0);
             });
     }
 
