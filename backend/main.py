@@ -21,12 +21,17 @@ def asdf():
 
 @app.route("/<subject>")
 def hello(subject):
-    terms = list(terms_provider.get_final_terms(subject, 0))
+    terms = map(lambda x:remove_parentheses(x).lower().strip(), list(terms_provider.get_final_terms(subject, 0)))
     print 'terms count: ' + str(len(terms))
-    terms_passed = list(map(lambda x: (remove_parentheses(x).lower().strip(), terms, subject), terms))
+    terms_passed = list(map(lambda x: (x, terms, subject), terms))
     print terms_passed
     pool = ThreadPool(100)
     results = pool.map(appearances.build_appearances_dict, terms_passed)
-    return jsonify(results)
+    newResults = {}
+    for result in results:
+        key = result.keys()[0]
+        newResults[key] = result[key]
+
+    return jsonify(newResults)
 
 app.run()

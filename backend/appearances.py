@@ -3,7 +3,7 @@ import urls_scanner
 from bs4 import BeautifulSoup
 
 
-URL_LIMIT = 1
+URL_LIMIT = 3
 def build_appearances_dict(args):
     term, all_terms, subject = args
     appearances_dict = {}
@@ -17,7 +17,7 @@ def build_appearances_dict(args):
         if not(baseUrl in seen_urls):
             seen_urls.append(baseUrl)
             safe_urls.append(url)
-            if len(safe_urls) > URL_LIMIT:
+            if len(safe_urls) >= URL_LIMIT:
                 break
 
     for url in safe_urls:
