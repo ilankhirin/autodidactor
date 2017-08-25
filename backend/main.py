@@ -1,17 +1,14 @@
-import appearances
-import re
-from flask import jsonify
-import terms_provider
-# encoding=utf8
 import sys
+import re
+from flask import jsonify, Flask
+from flask_cors import CORS
 from multiprocessing.dummy import Pool as ThreadPool
+import appearances
+import terms_provider
 import categoryAutocomleter
 
 reload(sys)
 sys.setdefaultencoding('utf8')
-
-from flask import Flask
-from flask_cors import CORS
 
 app = Flask(__name__)
 CORS(app)
