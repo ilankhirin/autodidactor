@@ -3,60 +3,27 @@ var BACKEND_URL = "http://localhost:5000";
 angular.module("autodidactorApp", []);
 
 angular.module("autodidactorApp").controller("autodidactorCtrl", function ($http) {
-    var autodidactorVm = this;
+    var vm = this;
 
-    autodidactorVm.searchInput = "";
-    autodidactorVm.graphJson = "Not back yet...";
+    vm.searchInput = "";
+    vm.graphJson = "Not back yet...";
 
-    autodidactorVm.search = function (inputSubject) {
+    vm.search = function (inputSubject) {
         url = BACKEND_URL + "/getGraph/" + inputSubject;
         $http.get(url).then(function (res) {
-            // data = res.data
-            // dataMock:
-            var data = {
-                "css": {
-                    "html": 547,
-                    "javascript": 339,
-                    "json": 20,
-                    "promise": 0
-                },
-                "html": {
-                    "css": 383,
-                    "javascript": 291,
-                    "json": 13,
-                    "promise": 0
-                },
-                "javascript": {
-                    "css": 282,
-                    "html": 260,
-                    "json": 17,
-                    "promise": 1
-                },
-                "json": {
-                    "css": 400,
-                    "html": 363,
-                    "javascript": 627,
-                    "promise": 0
-                },
-                "promise": {
-                    "css": 55,
-                    "html": 42,
-                    "javascript": 945,
-                    "json": 20
-                }
-            };
-            autodidactorVm.graphJson = data;
+            data = res.data
+            vm.graphJson = data;
             initializeGraph(data);
         });
     }
 
-    autodidactorVm.getSubjectAutocomlete = _.throttle(getSubjectAutocomlete, 1000);
+    vm.getSubjectAutocomlete = _.throttle(getSubjectAutocomlete, 1000);
 
     function getSubjectAutocomlete(inputText) {
         url = BACKEND_URL + "/getAutocomplete/" + inputText;
         $http.get(url)
             .then(function (res) {
-                autodidactorVm.subjectOptions = res.data.options;
+                vm.subjectOptions = res.data.options;
             });
     }
 
