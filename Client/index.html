@@ -9,7 +9,7 @@
   <link rel="stylesheet" href="./node_modules/bootstrap/dist/css/bootstrap.min.css">
   <link rel="stylesheet" href="style.css">
   <link rel="stylesheet" href="http://visjs.org/dist/vis.css">
-  
+
   <link rel="icon" type="image/x-icon" href="favicon.ico">
   <style type="text/css">
     #mynetwork {
@@ -25,11 +25,19 @@
 <body ng-app="autodidactorApp">
   <img src="./logo.png" class="logo">
   <div ng-controller="autodidactorCtrl as autodidactorVm">
-    <input class="text-input" type="text" ng-model="autodidactorVm.searchInput" placeholder="enter subject..."><button ng-click="autodidactorVm.search(autodidactorVm.searchInput)" class="search-button"></button>
+    <input type="text" class="text-input" placeholder="enter subject..." ng-model="autodidactorVm.searchInput"
+           ng-change="autodidactorVm.getSubjectAutocomlete(autodidactorVm.searchInput)">
+    <button ng-click="autodidactorVm.search(autodidactorVm.searchInput)" class="search-button"></button>
+    <p>{{ autodidactorVm.subjectOptions }}</p>
 
-    <!-- <div id="graph-container"> -->
-      
-<div id="mynetwork" class="graph-holder"></div>
+    <div>
+      <div id="temp-response" style="border: 1px solid black">
+        <h2>Response</h2>
+        <p>
+          {{ autodidactorVm.graphJson }}
+        </p>
+      </div>
+      <div id="mynetwork" class="graph-holder"></div>
 
     </div>
   </div>
@@ -37,9 +45,8 @@
 
 <script src="./node_modules/lodash/lodash.js"></script>
 <script src="./graph.js"></script>
-<script type="text/javascript" src="http://visjs.org/dist/vis.js"></script>
+<script src="http://visjs.org/dist/vis.js"></script>
 <script src="./node_modules/angular/angular.js"></script>
-<script src="./node_modules/cytoscape/dist/cytoscape.min.js"></script>
 <script src="./all.js"></script>
 
 
