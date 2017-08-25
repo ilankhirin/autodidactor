@@ -21,7 +21,7 @@ def remove_parentheses(str):
 def asdf():
     return "asdf"
 
-@app.route("/<subject>")
+@app.route("/getGraph/<subject>")
 def hello(subject):
     terms = terms_provider.get_final_terms(subject, 0)
     print 'terms count: ' + str(len(terms))
