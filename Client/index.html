@@ -14,16 +14,24 @@
 <body ng-app="autodidactorApp">
   <h1>Autodidactor</h1>
   <div ng-controller="autodidactorCtrl as autodidactorVm">
-    <input type="text" ng-model="autodidactorVm.searchInput"><button ng-click="autodidactorVm.search(autodidactorVm.searchInput)">search</button>
+    <input type="text" ng-model="autodidactorVm.searchInput" ng-change="autodidactorVm.getSubjectAutocomlete(autodidactorVm.searchInput)">
+    <button
+      ng-click="autodidactorVm.search(autodidactorVm.searchInput)">search</button>
 
-    <div id="graph-container">
-      
-    </div>
+      <div>
+        <div id="temp-response" style="border: 1px solid black">
+          <h2>Response</h2>
+          <p>
+            {{ autodidactorVm.graphJson }}
+          </p>
+        </div>
+        <div id="graph-container"></div>
+      </div>
   </div>
 </body>
 
 <script src="./node_modules/angular/angular.js"></script>
-<script src="./node_modules/cytospace/cytoscape.min.js"></script>
+<script src="./node_modules/cytoscape/dist/cytoscape.js"></script>
 <script src="./all.js"></script>
 <script src="./graph.js"></script>
 
