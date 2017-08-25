@@ -31,56 +31,22 @@ var connectionsData = {
   }
 };
 
+var nodes = getNodes(connectionsData);
+var edges = getEdges(connectionsData);
+
 var cy = cytoscape({
   container: document.getElementById('cy'),
-
-  boxSelectionEnabled: false,
-  autounselectify: true,
-
+  elements: {
+    nodes: nodes,
+    edges: edges
+  },
   style: cytoscape.stylesheet()
     .selector('node')
     .css({
-      'content': 'data(id)'
-    })
-    .selector('edge')
-    .css({
-      'curve-style': 'bezier',
-      'target-arrow-shape': 'triangle',
-      'width': 4,
-      'line-color': '#ddd',
-      'target-arrow-color': '#ddd'
-    })
-    .selector('.highlighted')
-    .css({
-      'background-color': '#61bffc',
-      'line-color': '#61bffc',
-      'target-arrow-color': '#61bffc',
-      'transition-property': 'background-color, line-color, target-arrow-color',
-      'transition-duration': '0.5s'
+      'content': 'data(id)',
+      'width': 100,
+      'height': 100
     }),
-
-  elements: {
-    nodes: getNodes(connectionsData),
-    edges: getEdges(connectionsData)
-    // nodes: [
-    //   { data: { id: 'a' } },
-    //   { data: { id: 'b' } },
-    //   { data: { id: 'c' } },
-    //   { data: { id: 'd' } },
-    //   { data: { id: 'e' } }
-    // ],
-
-    // edges: [
-    //   { data: { id: 'a"e', weight: 1, source: 'a', target: 'e' } },
-    //   { data: { id: 'ab', weight: 3, source: 'a', target: 'b' } },
-    //   { data: { id: 'be', weight: 4, source: 'b', target: 'e' } },
-    //   { data: { id: 'bc', weight: 5, source: 'b', target: 'c' } },
-    //   { data: { id: 'ce', weight: 6, source: 'c', target: 'e' } },
-    //   { data: { id: 'cd', weight: 2, source: 'c', target: 'd' } },
-    //   { data: { id: 'de', weight: 7, source: 'd', target: 'e' } }
-    // ]
-  },
-
   layout: {
     name: 'breadthfirst',
     directed: true,
@@ -100,13 +66,13 @@ function getNodes(data) {
 
 function getEdges(data) {
   var edges = [];
-  debugger
+
   for (source in data) {
     for (target in data[source]) {
       edges.push({
         data: {
           id: source + "_" + target,
-          weight: data[source][target],
+          weight2: data[source][target],
           source: source,
           target: target
         }
@@ -114,8 +80,11 @@ function getEdges(data) {
     }
   }
 
-  debugger
   return edges;
+}
+
+function styleNode(node) {
+
 }
 
 // var bfs = cy.elements().bfs('#a', function(){}, true);
