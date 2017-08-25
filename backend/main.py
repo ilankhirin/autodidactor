@@ -40,3 +40,6 @@ def getAutocomplete(input):
     options = categoryAutocomleter.getOptions(input)
     optionsDict = { "options" : options }
     return jsonify(optionsDict)
+
+if __name__ == "__main__":
+    app.run()
