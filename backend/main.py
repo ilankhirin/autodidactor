@@ -1,18 +1,19 @@
-import appearances
-import re
-from flask import jsonify
-import terms_provider
-# encoding=utf8
 import sys
+import re
+from flask import jsonify, Flask
+from flask_cors import CORS
 from multiprocessing.dummy import Pool as ThreadPool
 import grequests
 import urls_scanner
+import appearances
+import terms_provider
+import categoryAutocomleter
 
 reload(sys)
 sys.setdefaultencoding('utf8')
 
-from flask import Flask
 app = Flask(__name__)
+CORS(app)
 
 def remove_parentheses(str):
     return re.sub(r"[\(\[].*?[\)\]]", "", str)
@@ -21,8 +22,8 @@ def remove_parentheses(str):
 def asdf():
     return "asdf"
 
-@app.route("/<subject>")
-def hello(subject):
+@app.route("/getGraph/<subject>")
+def getGraph(subject):
     terms = map(lambda x:remove_parentheses(x).lower().strip(), list(terms_provider.get_final_terms(subject, 0)))
     print 'terms count: ' + str(len(terms))
 
@@ -50,7 +51,6 @@ def hello(subject):
 
     return jsonify(newResults)
 
-
 def get_urls(subject, terms):
     urls = {}
     URL_LIMIT = 3
@@ -62,5 +62,11 @@ def get_urls(subject, terms):
             urls[search_result] = term
     return urls
 
+@app.route("/getAutocomplete/<input>")
+def getAutocomplete(input):
+    options = categoryAutocomleter.getOptions(input)
+    optionsDict = { "options" : options }
+    return jsonify(optionsDict)
 
-app.run()
+if __name__ == "__main__":
+    app.run()

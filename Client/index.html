@@ -7,39 +7,58 @@
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="./node_modules/bootstrap/dist/css/bootstrap.min.css">
-  <link rel="stylesheet" href="style.css">
   <link rel="stylesheet" href="http://visjs.org/dist/vis.css">
-  
+  <link rel="stylesheet" href="style.css">
+
   <link rel="icon" type="image/x-icon" href="favicon.ico">
-  <style type="text/css">
-    #mynetwork {
-      width: 600px;
-      height: 400px;
-      border: 1px solid lightgray;
-    }
-  </style>
-
-
 </head>
 
 <body ng-app="autodidactorApp">
-  <h1>Autodidactor</h1>
-  <div ng-controller="autodidactorCtrl as autodidactorVm">
-    <input type="text" ng-model="autodidactorVm.searchInput" placeholder="enter subject..."><button ng-click="autodidactorVm.search(autodidactorVm.searchInput)">search</button>
+  <img src="./logo.png" class="logo">
+  <div ng-controller="autodidactorCtrl as vm">
+      <md-autocomplete
+      ng-disabled="ctrl.isDisabled"
+      md-no-cache="ctrl.noCache"
+      md-selected-item="ctrl.selectedItem"
+      md-search-text-change="ctrl.searchTextChange(ctrl.searchText)"
+      md-search-text="ctrl.searchText"
+      md-selected-item-change="ctrl.selectedItemChange(item)"
+      md-items="item in ctrl.querySearch(ctrl.searchText)"
+      md-item-text="item.display"
+      md-min-length="0"
+      placeholder="What is your favorite US state?">
+    <md-item-template>
+      <span md-highlight-text="ctrl.searchText" md-highlight-flags="^i">{{item.display}}</span>
+    </md-item-template>
+    <md-not-found>
+      No states matching "{{ctrl.searchText}}" were found.
+      <a ng-click="ctrl.newState(ctrl.searchText)">Create a new one!</a>
+    </md-not-found>
+  </md-autocomplete>
 
-    <!-- <div id="graph-container"> -->
-      
-<div id="mynetwork"></div>
+
+    <input type="text" class="text-input" placeholder="enter subject..." ng-model="vm.searchInput"
+           ng-change="vm.getSubjectAutocomlete(vm.searchInput)">
+    <button ng-click="vm.search(vm.searchInput)" class="search-button"></button>
+    <p>{{ vm.subjectOptions }}</p>
+
+    <div>
+      <div id="temp-response" style="border: 1px solid black">
+        <h2>Response</h2>
+        <p>
+          {{ vm.graphJson }}
+        </p>
+      </div>
+      <div id="mynetwork" class="graph-holder"></div>
 
     </div>
   </div>
 </body>
 
 <script src="./node_modules/lodash/lodash.js"></script>
-<script src="./graph.js"></script>
-<script type="text/javascript" src="http://visjs.org/dist/vis.js"></script>
+<script src="http://visjs.org/dist/vis.js"></script>
 <script src="./node_modules/angular/angular.js"></script>
-<script src="./node_modules/cytoscape/dist/cytoscape.min.js"></script>
+<script src="./graph.js"></script>
 <script src="./all.js"></script>
 
 

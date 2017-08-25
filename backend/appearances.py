@@ -3,7 +3,7 @@ import urls_scanner
 from bs4 import BeautifulSoup
 
 
-URL_LIMIT = 3
+URL_LIMIT = 1
 def build_appearances_dict(response, term, all_terms):
     appearances_dict = {}
     appearances_dict[term] = {}
