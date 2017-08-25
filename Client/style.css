@@ -9,3 +9,30 @@ body {
     left: 0;
     top: 0;
   }
+
+
+  .graph-holder {
+    border-radius: 47px;
+    width: 80%;
+    margin: 10px auto;
+  }
+
+  .logo {
+    margin: 20px;
+    width: 200px;
+  }
+
+  .text-input {
+    height: 48px;
+    border-radius: 10px;
+    font-size: 22px;
+    font-family: sans-serif;
+    text-indent: 10px;
+  }
+
+  .search-button {
+    border-radius: 13px;
+    height: 48px;
+    width: 42px;
+    vertical-align: top
+  }

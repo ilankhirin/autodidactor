@@ -23,13 +23,13 @@
 </head>
 
 <body ng-app="autodidactorApp">
-  <h1>Autodidactor</h1>
+  <img src="./logo.png" class="logo">
   <div ng-controller="autodidactorCtrl as autodidactorVm">
-    <input type="text" ng-model="autodidactorVm.searchInput" placeholder="enter subject..."><button ng-click="autodidactorVm.search(autodidactorVm.searchInput)">search</button>
+    <input class="text-input" type="text" ng-model="autodidactorVm.searchInput" placeholder="enter subject..."><button ng-click="autodidactorVm.search(autodidactorVm.searchInput)" class="search-button"></button>
 
     <!-- <div id="graph-container"> -->
       
-<div id="mynetwork"></div>
+<div id="mynetwork" class="graph-holder"></div>
 
     </div>
   </div>
